@@ -2,7 +2,6 @@ using Fincheck.Application.DTOs.Auth;
 using Fincheck.Domain.Models;
 using Fincheck.Infrastructure.Repositories;
 using FinCheck.Application.Config;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,7 +12,7 @@ namespace Fincheck.Application.Services
 {
     public class AuthService(AuthRepository authRepository, JwtSettings jwtSettings, AppSettings appSettings)
     {
-    	private readonly AuthRepository _authRepository = authRepository;
+        private readonly AuthRepository _authRepository = authRepository;
         private readonly JwtSettings _jwtSettings = jwtSettings;
         private readonly AppSettings _appSettings = appSettings;
 
@@ -25,7 +24,7 @@ namespace Fincheck.Application.Services
             var user = new User
             {
                 Email = dto.Email,
-                PasswordHash = HashPassword(dto.Password),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 DisplayName = dto.DisplayName,
                 BaseCurrency = dto.BaseCurrency,
                 BirthDate = dto.BirthDate
@@ -39,43 +38,43 @@ namespace Fincheck.Application.Services
         public async Task<AuthResponseDto> ValidateUserAsync(LoginRequestDto dto)
         {
             var user = await _authRepository.GetUserByEmailAsync(dto.Email);
-            if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 return new AuthResponseDto { Success = false, Message = "Invalid credentials." };
 
             var token = GenerateJwtToken(user);
-            var refreshToken = GenerateRefreshToken();
+            var (Token, Expires) = GenerateRefreshToken();
 
-            // Store refreshToken with user if you want persistent refresh tokens
+            user.RefreshToken = Token;
+            user.RefreshTokenExpiry = Expires;
+            await _authRepository.UpdateUserAsync(user);
 
-            return new AuthResponseDto { Success = true, Token = token, RefreshToken = refreshToken };
+            return new AuthResponseDto { Success = true, Token = token, RefreshToken = Token };
         }
 
-        public AuthResponseDto RefreshToken(string refreshToken)
+        public async Task<AuthResponseDto> RefreshTokenAsync(string refreshToken)
         {
-            // Validate refresh token logic here (e.g., check against DB or in-memory store)
-            // For demo, just return a new JWT
-            var token = GenerateJwtToken(null); // You'd need to get the user from the refresh token
-            return new AuthResponseDto { Success = true, Token = token };
+            var user = await _authRepository.GetUserByRefreshTokenAsync(refreshToken);
+            if (user == null || user.RefreshTokenExpiry < DateTime.UtcNow)
+                return new AuthResponseDto { Success = false, Message = "Invalid or expired refresh token." };
+
+            var newToken = GenerateJwtToken(user);
+            var (Token, Expires) = GenerateRefreshToken();
+
+            user.RefreshToken = Token;
+            user.RefreshTokenExpiry = Expires;
+            await _authRepository.UpdateUserAsync(user);
+
+            return new AuthResponseDto { Success = true, Token = newToken, RefreshToken = Token };
         }
 
-        private static byte[] HashPassword(string password)
-    	{
-    		return SHA256.HashData(Encoding.UTF8.GetBytes(password));
-    	}
-
-    	private static bool VerifyPassword(string password, byte[]? hash)
-        {
-            if (hash == null) return false;
-            var computed = HashPassword(password);
-            return hash.SequenceEqual(computed);
-        }
-
-        private string GenerateJwtToken(User? user)
+        private string GenerateJwtToken(User user)
         {
             var claims = new List<Claim>
-            {
-                new(ClaimTypes.Name, user?.Email ?? "unknown"),
-            };
+                {
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new(ClaimTypes.Name, user.Email),
+                    new(ClaimTypes.GivenName, user.DisplayName)
+                };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -83,19 +82,19 @@ namespace Fincheck.Application.Services
             var token = new JwtSecurityToken(
                 _jwtSettings.Issuer,
                 _jwtSettings.Audience,
-                claims,
+                claims: claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private static string GenerateRefreshToken()
+        private static (string Token, DateTime Expires) GenerateRefreshToken()
         {
             var randomBytes = new byte[32];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomBytes);
-            return Convert.ToBase64String(randomBytes);
+            return (Convert.ToBase64String(randomBytes), DateTime.UtcNow.AddDays(7));
         }
     }
 }

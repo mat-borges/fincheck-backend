@@ -15,30 +15,31 @@ namespace Fincheck.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto dto)
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
             var result = await _authService.RegisterUserAsync(dto);
-            if (result.Success)
-                return Ok(new { message = result.Message });
-            return BadRequest(result.Message);
+            return result.Success ? Ok(result) : BadRequest(result);;
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
             var result = await _authService.ValidateUserAsync(dto);
-            if (result.Success)
-                return Ok(new { token = result.Token, refreshToken = result.RefreshToken });
-            return Unauthorized(result.Message);
+            return result.Success ? Ok(result) : Unauthorized(result);
         }
 
         [AllowAnonymous]
         [HttpPost("refresh-token")]
-        public IActionResult RefreshToken([FromBody] RefreshTokenRequestDto dto)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto dto)
         {
-            var result = _authService.RefreshToken(dto.RefreshToken);
-            if (result.Success)
-                return Ok(new { token = result.Token });
-            return Unauthorized(result.Message);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _authService.RefreshTokenAsync(dto.RefreshToken);
+            return result.Success ? Ok(result) : Unauthorized(result);
         }
     }
 }
