@@ -2,6 +2,7 @@ using Fincheck.Application.DTOs.Auth;
 using Fincheck.Domain.Models;
 using Fincheck.Infrastructure.Repositories;
 using FinCheck.Application.Config;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,11 +11,11 @@ using System.Text;
 
 namespace Fincheck.Application.Services
 {
-    public class AuthService(AuthRepository authRepository, JwtSettings jwtSettings, AppSettings appSettings)
+    public class AuthService(AuthRepository authRepository, IOptions<JwtSettings> jwtSettings, IOptions<AppSettings> appSettings)
     {
         private readonly AuthRepository _authRepository = authRepository;
-        private readonly JwtSettings _jwtSettings = jwtSettings;
-        private readonly AppSettings _appSettings = appSettings;
+        private readonly JwtSettings _jwtSettings = jwtSettings.Value;
+        private readonly AppSettings _appSettings = appSettings.Value;
 
         public async Task<AuthResponseDto> RegisterUserAsync(RegisterRequestDto dto)
         {
