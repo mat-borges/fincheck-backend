@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fincheck.Domain.Models
 {
+	[Index(nameof(Email), IsUnique = true)]
 	public partial class User : BaseEntity
 	{
 		[Required, EmailAddress]
