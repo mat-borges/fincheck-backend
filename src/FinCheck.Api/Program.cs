@@ -3,6 +3,7 @@ using Fincheck.Application.Services;
 using Fincheck.Infrastructure.Data;
 using Fincheck.Infrastructure.Repositories;
 using FinCheck.Application.Config;
+using FinCheck.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -54,6 +55,8 @@ builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TransactionRepository>();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<CategoryService>();
 
 // ======================
 // Config JWT Authentication
