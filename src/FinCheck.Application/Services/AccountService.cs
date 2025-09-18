@@ -28,5 +28,26 @@ namespace Fincheck.Application.Services
 			};
 			await _accountRepository.AddAccountAsync(newAccount);
 		}
-	 }
+
+		public async Task UpdateBalanceAsync(Guid accountId, decimal ammount, TransactionType type)
+		{
+			var account = await _accountRepository.GetByIdAsync(accountId) ?? throw new Exception("Account not found");
+
+			switch (type)
+			{
+				case TransactionType.Income:
+					account.Balance += ammount;
+					break;
+				case TransactionType.Expense:
+					account.Balance -= ammount;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, null);
+			}
+
+			account.UpdatedAt = DateTime.UtcNow;
+			await _accountRepository.UpdateAsync(account);
+      }
+
+    }
 }

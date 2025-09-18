@@ -17,5 +17,11 @@ namespace FinCheck.Infrastructure.Repositories
 			await _context.SaveChangesAsync();
 		}
 
+		public async Task UpdateAsync(Account account)
+		{
+			_context.Accounts.Update(account);
+			await _context.SaveChangesAsync();
+		}
+
 	}
 }

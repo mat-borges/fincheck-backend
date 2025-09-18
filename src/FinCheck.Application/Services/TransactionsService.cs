@@ -4,9 +4,10 @@ using Fincheck.Infrastructure.Repositories;
 
 namespace Fincheck.Application.Services
 {
-	public class TransactionService(TransactionRepository transactionRepository)
+	public class TransactionService(TransactionRepository transactionRepository, AccountService accountService)
 	{
 		private readonly TransactionRepository _transactionRepository = transactionRepository;
+		private readonly AccountService _accountService = accountService;
 
 		public async Task<TransactionResponseDto> CreateAsync(Guid userId, TransactionRequestDto dto)
 		{
@@ -23,8 +24,11 @@ namespace Fincheck.Application.Services
 				CreatedAt = DateTime.UtcNow,
 				UpdatedAt = DateTime.UtcNow
 			};
-
 			await _transactionRepository.AddAsync(transaction);
+
+			var account = await _accountService.GetByIdAsync(dto.AccountId) ?? throw new Exception("Account not found");
+			await _accountService.UpdateBalanceAsync(account.Id, dto.Amount, dto.Type);
+
 			return MapToDto(transaction);
 		}
 
