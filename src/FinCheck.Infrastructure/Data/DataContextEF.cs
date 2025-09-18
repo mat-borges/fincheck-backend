@@ -69,6 +69,14 @@ namespace Fincheck.Infrastructure.Data
 			modelBuilder.Entity<Account>()
 					.HasIndex(a => new { a.UserId, a.Name })
 					.IsUnique();
+
+			modelBuilder.Entity<Transaction>()
+					.Property(t => t.Type)
+					.HasConversion<byte>();
+
+			modelBuilder.Entity<Category>()
+					.Property(c => c.Type)
+					.HasConversion<byte>();
 		}
 
 	}

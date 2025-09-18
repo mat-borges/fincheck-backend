@@ -6,6 +6,12 @@ namespace Fincheck.Domain.Models
         Income = 1,
         Expense = 2,
         Transfer = 3,
-        Fee = 4
+    }
+
+    public enum CategoryType : byte
+    {
+        Income = 1,
+        Expense = 2,
+        Transfer = 3
     }
 }

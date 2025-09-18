@@ -32,7 +32,7 @@ namespace Fincheck.Domain.Models
 
     	public DateTime TransactionDate { get; set; }
 
-    	[Required, MaxLength(50)]
-    	public string Type { get; set; } = string.Empty; // "Income", "Expense", "Transfer"
+    	[Required]
+    	public TransactionType Type { get; set; }
     }
 }

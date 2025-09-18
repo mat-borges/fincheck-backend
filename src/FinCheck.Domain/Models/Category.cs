@@ -13,8 +13,8 @@ namespace Fincheck.Domain.Models
     	[Required, MaxLength(100)]
     	public string Name { get; set; } = string.Empty;
 
-    	[MaxLength(50)]
-    	public string? Type { get; set; } // "Income", "Expense", "Transfer"
+    	[Required]
+    	public CategoryType Type { get; set; }
 
     	// Navigation
     	public ICollection<Transaction> Transactions { get; set; } = [];
