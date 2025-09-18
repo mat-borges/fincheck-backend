@@ -57,6 +57,8 @@ builder.Services.AddScoped<TransactionRepository>();
 builder.Services.AddScoped<TransactionService>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<AccountRepository>();
+builder.Services.AddScoped<AccountService>();
 
 // ======================
 // Config JWT Authentication
