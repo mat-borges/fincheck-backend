@@ -52,6 +52,8 @@ builder.Services.AddCors((options) =>
 builder.Services.AddDbContext<DataContextEF>();
 builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<TransactionRepository>();
+builder.Services.AddScoped<TransactionService>();
 
 // ======================
 // Config JWT Authentication
