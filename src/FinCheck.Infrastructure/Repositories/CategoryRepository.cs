@@ -12,7 +12,7 @@ namespace FinCheck.Infrastructure.Repositories
 
 		public async Task<List<Category>> GetAllByUserAsync(Guid userId) => await _context.Categories.Where(c => c.UserId == userId).ToListAsync();
 
-		public async Task CreateAsync(Category category)
+		public async Task AddCategoryAsync(Category category)
 		{
 			await _context.Categories.AddAsync(category);
 			await _context.SaveChangesAsync();

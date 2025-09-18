@@ -15,7 +15,7 @@ namespace Fincheck.Application.Services
 		public async Task CreateAsync(Guid userId, Category category)
 		{
 			category.UserId = userId;
-			await _categoryRepository.CreateAsync(category);
+			await _categoryRepository.AddCategoryAsync(category);
 		}
 
 		public async Task AddRangeAsync(IEnumerable<Category> categories)
