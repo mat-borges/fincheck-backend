@@ -1,3 +1,5 @@
+using Fincheck.Domain.Models;
+
 namespace Fincheck.Application.DTOs.Transactions
 {
 	public class TransactionRequestDto
@@ -8,6 +10,6 @@ namespace Fincheck.Application.DTOs.Transactions
 		public string? Description { get; set; }
 		public decimal Amount { get; set; }
 		public DateTime TransactionDate { get; set; }
-		public string Type { get; set; } = string.Empty; // Income, Expense, Transfer
+		public TransactionType Type { get; set; }
 	}
 }
