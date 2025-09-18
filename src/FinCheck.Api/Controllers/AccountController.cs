@@ -1,10 +1,15 @@
 using System.Security.Claims;
+using Fincheck.Application.DTOs.Accounts;
 using Fincheck.Application.Services;
 using Fincheck.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinCheck.Api.Controllers
 {
+	[ApiController]
+	[Route("api/[controller]")]
+	[Authorize]
 	public class AccountController(AccountService accountService) : ControllerBase
 	{
 		private readonly AccountService _accountService = accountService;
@@ -20,11 +25,11 @@ namespace FinCheck.Api.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create([FromBody] Account account)
+		public async Task<IActionResult> Create([FromBody] AccountRequestDto account)
 		{
 			var userId = GetUserId();
 			await _accountService.CreateAsync(userId, account);
-			return CreatedAtAction(nameof(GetAll), new { userId = account.UserId }, account);
+			return CreatedAtAction(nameof(GetAll), new { userId }, account);
 		}
 	}
 };

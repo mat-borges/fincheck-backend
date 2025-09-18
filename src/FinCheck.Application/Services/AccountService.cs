@@ -1,3 +1,4 @@
+using Fincheck.Application.DTOs.Accounts;
 using Fincheck.Domain.Models;
 using FinCheck.Infrastructure.Repositories;
 
@@ -17,10 +18,15 @@ namespace Fincheck.Application.Services
 			return await _accountRepository.GetByIdAsync(id);
 		}
 
-		public async Task CreateAsync(Guid userId, Account account)
+		public async Task CreateAsync(Guid userId, AccountRequestDto account)
 		{
-			account.UserId = userId;
-			await _accountRepository.AddAccountAsync(account);
+			var newAccount = new Account
+			{
+				UserId = userId,
+				Name = account.Name,
+				Balance = account.Balance
+			};
+			await _accountRepository.AddAccountAsync(newAccount);
 		}
 	 }
 }

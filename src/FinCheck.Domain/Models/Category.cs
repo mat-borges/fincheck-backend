@@ -5,7 +5,7 @@ namespace Fincheck.Domain.Models
 {
     public partial class Category:BaseEntity
     {
-    	public Guid? UserId { get; set; } // nullable if global category
+    	public Guid UserId { get; set; }
 
     	[ForeignKey("UserId")]
     	public User? User { get; set; }
