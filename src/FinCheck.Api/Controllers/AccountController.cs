@@ -1,7 +1,6 @@
 using System.Security.Claims;
-using Fincheck.Application.DTOs.Accounts;
-using Fincheck.Application.Services;
-using Fincheck.Domain.Models;
+using FinCheck.Application.DTOs.Accounts;
+using FinCheck.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +9,9 @@ namespace FinCheck.Api.Controllers
 	[ApiController]
 	[Route("api/[controller]")]
 	[Authorize]
-	public class AccountController(AccountService accountService) : ControllerBase
+	public class AccountController(IAccountService accountService) : ControllerBase
 	{
-		private readonly AccountService _accountService = accountService;
+		private readonly IAccountService _accountService = accountService;
 
 		private Guid GetUserId() => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 

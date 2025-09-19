@@ -1,15 +1,17 @@
-using Fincheck.Application.DTOs.Transactions;
-using Fincheck.Domain.Models;
-using Fincheck.Infrastructure.Repositories;
+using FinCheck.Application.DTOs.Transactions;
+using FinCheck.Application.Mappers;
+using FinCheck.Application.Services.Interfaces;
+using FinCheck.Domain.Models;
+using FinCheck.Domain.Repositories;
 
-namespace Fincheck.Application.Services
+namespace FinCheck.Application.Services
 {
-	public class TransactionService(TransactionRepository transactionRepository, AccountService accountService)
+	public class TransactionService(ITransactionRepository transactionRepository, IAccountService accountService) : ITransactionService
 	{
-		private readonly TransactionRepository _transactionRepository = transactionRepository;
-		private readonly AccountService _accountService = accountService;
+		private readonly ITransactionRepository _transactionRepository = transactionRepository;
+		private readonly IAccountService _accountService = accountService;
 
-		public async Task<TransactionResponseDto> CreateAsync(Guid userId, TransactionRequestDto dto)
+        public async Task<TransactionResponseDto> CreateAsync(Guid userId, TransactionRequestDto dto)
 		{
 			var transaction = new Transaction
 			{
@@ -29,19 +31,19 @@ namespace Fincheck.Application.Services
 			var account = await _accountService.GetByIdAsync(dto.AccountId) ?? throw new Exception("Account not found");
 			await _accountService.UpdateBalanceAsync(account.Id, dto.Amount, dto.Type);
 
-			return MapToDto(transaction);
+			return TransactionMapper.ToDto(transaction);
 		}
 
 		public async Task<IEnumerable<TransactionResponseDto>> GetAllAsync(Guid userId)
 		{
 			var transactions = await _transactionRepository.GetAllByUserAsync(userId);
-			return transactions.Select(MapToDto);
+			return transactions.Select(TransactionMapper.ToDto);
 		}
 
 		public async Task<TransactionResponseDto?> GetByIdAsync(Guid id, Guid userId)
 		{
 			var transaction = await _transactionRepository.GetByIdAsync(id, userId);
-			return transaction == null ? null : MapToDto(transaction);
+			return transaction == null ? null : TransactionMapper.ToDto(transaction);
 		}
 
 		public async Task<TransactionResponseDto?> UpdateAsync(Guid userId, TransactionUpdateDto dto)
@@ -60,7 +62,7 @@ namespace Fincheck.Application.Services
 
 			await _transactionRepository.UpdateAsync(transaction);
 
-			return MapToDto(transaction);
+			return TransactionMapper.ToDto(transaction);
 		}
 
 		public async Task<bool> DeleteAsync(Guid id, Guid userId)
@@ -71,19 +73,5 @@ namespace Fincheck.Application.Services
 			await _transactionRepository.DeleteAsync(transaction);
 			return true;
 		}
-
-		private static TransactionResponseDto MapToDto(Transaction t) =>
-				new()
-				{
-					Id = t.Id,
-					AccountId = t.AccountId,
-					CategoryId = t.CategoryId,
-					Title = t.Title,
-					Description = t.Description,
-					Amount = t.Amount,
-					TransactionDate = t.TransactionDate,
-					Type = t.Type
-				};
-
 	}
 }

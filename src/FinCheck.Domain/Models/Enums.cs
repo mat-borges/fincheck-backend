@@ -1,5 +1,5 @@
 
-namespace Fincheck.Domain.Models
+namespace FinCheck.Domain.Models
 {
     public enum TransactionType : byte
     {

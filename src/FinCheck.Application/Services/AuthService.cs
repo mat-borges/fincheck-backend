@@ -1,9 +1,9 @@
-using Fincheck.Application.DTOs.Auth;
-using Fincheck.Domain.Models;
-using Fincheck.Infrastructure.Repositories;
+using FinCheck.Application.DTOs.Auth;
+using FinCheck.Application.Services.Interfaces;
+using FinCheck.Domain.Models;
+using FinCheck.Domain.Repositories;
 using FinCheck.Application.Config;
 using FinCheck.Application.Seed;
-using FinCheck.Infrastructure.Repositories;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,12 +11,12 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Fincheck.Application.Services
+namespace FinCheck.Application.Services
 {
-    public class AuthService(AuthRepository authRepository, CategoryRepository categoryRepository, IOptions<JwtSettings> jwtSettings, IOptions<AppSettings> appSettings)
+    public class AuthService(IAuthRepository authRepository, ICategoryRepository categoryRepository, IOptions<JwtSettings> jwtSettings, IOptions<AppSettings> appSettings) : IAuthService
     {
-        private readonly AuthRepository _authRepository = authRepository;
-        private readonly CategoryRepository _categoryRepository = categoryRepository;
+        private readonly IAuthRepository _authRepository = authRepository;
+        private readonly ICategoryRepository _categoryRepository = categoryRepository;
         private readonly JwtSettings _jwtSettings = jwtSettings.Value;
         private readonly AppSettings _appSettings = appSettings.Value;
 

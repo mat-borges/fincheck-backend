@@ -1,17 +1,17 @@
 using System.Security.Claims;
-using Fincheck.Application.DTOs.Transactions;
-using Fincheck.Application.Services;
+using FinCheck.Application.DTOs.Transactions;
+using FinCheck.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fincheck.Api.Controllers
+namespace FinCheck.Api.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
 	[Authorize]
-	public class TransactionController(TransactionService transactionService) : ControllerBase
+	public class TransactionController(ITransactionService transactionService) : ControllerBase
 	{
-		private readonly TransactionService _transactionService = transactionService;
+		private readonly ITransactionService _transactionService = transactionService;
 
 		private Guid GetUserId() => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 

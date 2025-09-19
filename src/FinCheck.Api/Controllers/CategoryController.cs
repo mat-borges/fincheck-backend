@@ -1,7 +1,8 @@
 using System.Security.Claims;
-using Fincheck.Application.DTOs.Categories;
-using Fincheck.Application.Services;
-using Fincheck.Domain.Models;
+using FinCheck.Application.DTOs.Categories;
+using FinCheck.Application.Services;
+using FinCheck.Application.Services.Interfaces;
+using FinCheck.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +11,9 @@ namespace FinCheck.Api.Controllers
 	[ApiController]
 	[Route("api/[controller]")]
 	[Authorize]
-	public class CategoryController(CategoryService categoryService) : ControllerBase
+	public class CategoryController(ICategoryService categoryService) : ControllerBase
 	{
-		private readonly CategoryService _categoryService = categoryService;
+		private readonly ICategoryService _categoryService = categoryService;
 
 		private Guid GetUserId() => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 

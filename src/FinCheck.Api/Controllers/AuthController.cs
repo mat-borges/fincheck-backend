@@ -1,15 +1,15 @@
-using Fincheck.Application.DTOs.Auth;
-using Fincheck.Application.Services;
+using FinCheck.Application.DTOs.Auth;
+using FinCheck.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fincheck.Api.Controllers
+namespace FinCheck.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController(AuthService authService) : ControllerBase
+    public class AuthController(IAuthService authService) : ControllerBase
     {
-        private readonly AuthService _authService = authService;
+        private readonly IAuthService _authService = authService;
 
         [AllowAnonymous]
         [HttpPost("register")]

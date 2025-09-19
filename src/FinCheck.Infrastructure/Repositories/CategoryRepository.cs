@@ -1,5 +1,5 @@
-using Fincheck.Domain.Models;
-using Fincheck.Infrastructure.Data;
+using FinCheck.Domain.Models;
+using FinCheck.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinCheck.Infrastructure.Repositories

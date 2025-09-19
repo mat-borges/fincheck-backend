@@ -1,10 +1,11 @@
-using Fincheck.Domain.Models;
-using Fincheck.Infrastructure.Data;
+using FinCheck.Domain.Models;
+using FinCheck.Infrastructure.Data;
+using FinCheck.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinCheck.Infrastructure.Repositories
 {
-	public class AccountRepository(DataContextEF context)
+	public class AccountRepository(DataContextEF context) : IAccountRepository
 	{
 		private readonly DataContextEF _context = context;
 

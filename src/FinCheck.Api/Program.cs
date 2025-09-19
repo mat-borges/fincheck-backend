@@ -1,7 +1,7 @@
 using System.Text;
-using Fincheck.Application.Services;
-using Fincheck.Infrastructure.Data;
-using Fincheck.Infrastructure.Repositories;
+using FinCheck.Application.Services;
+using FinCheck.Infrastructure.Data;
+using FinCheck.Infrastructure.Repositories;
 using FinCheck.Application.Config;
 using FinCheck.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

@@ -1,6 +1,6 @@
-using Fincheck.Domain.Models;
+using FinCheck.Domain.Models;
 
-namespace Fincheck.Application.DTOs.Categories
+namespace FinCheck.Application.DTOs.Categories
 {
     public partial class CategoryRequestDto
     {

@@ -1,4 +1,4 @@
-namespace Fincheck.Application.DTOs.Auth
+namespace FinCheck.Application.DTOs.Auth
 {
     public class AuthResponseDto
     {

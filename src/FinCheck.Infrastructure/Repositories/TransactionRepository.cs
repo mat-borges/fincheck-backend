@@ -1,10 +1,11 @@
-using Fincheck.Domain.Models;
-using Fincheck.Infrastructure.Data;
+using FinCheck.Domain.Models;
+using FinCheck.Domain.Repositories;
+using FinCheck.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fincheck.Infrastructure.Repositories
+namespace FinCheck.Infrastructure.Repositories
 {
-	public class TransactionRepository(DataContextEF context)
+	public class TransactionRepository(DataContextEF context) : ITransactionRepository
 	{
 		private readonly DataContextEF _context = context;
 

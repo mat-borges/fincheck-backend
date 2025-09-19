@@ -1,5 +1,5 @@
 
-namespace Fincheck.Application.DTOs.Accounts
+namespace FinCheck.Application.DTOs.Accounts
 {
     public partial class AccountRequestDto
     {

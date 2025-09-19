@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Fincheck.Application.DTOs.Auth
+namespace FinCheck.Application.DTOs.Auth
 {
     public class RefreshTokenRequestDto
     {

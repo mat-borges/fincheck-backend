@@ -1,6 +1,6 @@
-using Fincheck.Domain.Models;
+using FinCheck.Domain.Models;
 
-namespace Fincheck.Application.DTOs.Transactions
+namespace FinCheck.Application.DTOs.Transactions
 {
 	public class TransactionResponseDto
 	{

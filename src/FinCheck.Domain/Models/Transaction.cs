@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Fincheck.Domain.Models
+namespace FinCheck.Domain.Models
 {
     public partial class Transaction:BaseEntity
     {

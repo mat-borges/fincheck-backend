@@ -1,12 +1,13 @@
-using Fincheck.Application.DTOs.Categories;
-using Fincheck.Domain.Models;
-using FinCheck.Infrastructure.Repositories;
+using FinCheck.Application.DTOs.Categories;
+using FinCheck.Application.Services.Interfaces;
+using FinCheck.Domain.Models;
+using FinCheck.Domain.Repositories;
 
-namespace Fincheck.Application.Services
+namespace FinCheck.Application.Services
 {
-	public class CategoryService(CategoryRepository categoryRepository)
+	public class CategoryService(ICategoryRepository categoryRepository) : ICategoryService
 	{
-		private readonly CategoryRepository _categoryRepository = categoryRepository;
+		private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
 		public async Task<List<Category>> GetAllAsync(Guid userId)
 		{

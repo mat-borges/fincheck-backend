@@ -1,4 +1,4 @@
-namespace Fincheck.Application.DTOs.Transactions
+namespace FinCheck.Application.DTOs.Transactions
 {
 	public class TransactionUpdateDto : TransactionRequestDto
 	{

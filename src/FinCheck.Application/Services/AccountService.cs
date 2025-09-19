@@ -1,12 +1,13 @@
-using Fincheck.Application.DTOs.Accounts;
-using Fincheck.Domain.Models;
-using FinCheck.Infrastructure.Repositories;
+using FinCheck.Application.DTOs.Accounts;
+using FinCheck.Application.Services.Interfaces;
+using FinCheck.Domain.Models;
+using FinCheck.Domain.Repositories;
 
-namespace Fincheck.Application.Services
+namespace FinCheck.Application.Services
 {
-	public class AccountService(AccountRepository accountRepository)
+	public class AccountService(IAccountRepository accountRepository) : IAccountService
 	{
-		private readonly AccountRepository _accountRepository = accountRepository;
+		private readonly IAccountRepository _accountRepository = accountRepository;
 
 		public async Task<List<Account>> GetAllAsync(Guid userId)
 		{

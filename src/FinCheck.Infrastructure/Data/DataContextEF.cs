@@ -1,8 +1,8 @@
-using Fincheck.Domain.Models;
+using FinCheck.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Fincheck.Infrastructure.Data
+namespace FinCheck.Infrastructure.Data
 {
     public class DataContextEF(IConfiguration config) : DbContext
     {
