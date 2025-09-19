@@ -1,8 +1,9 @@
 using System.Text;
-using FinCheck.Application.Services;
-using FinCheck.Infrastructure.Data;
-using FinCheck.Infrastructure.Repositories;
 using FinCheck.Application.Config;
+using FinCheck.Application.Services;
+using FinCheck.Application.Services.Interfaces;
+using FinCheck.Domain.Repositories;
+using FinCheck.Infrastructure.Data;
 using FinCheck.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +29,21 @@ var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()
 // ======================
 // Essential Services
 // ======================
+//DbContext
+builder.Services.AddDbContext<DataContextEF>();
+
+// Services
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+
+// Repositories
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -49,16 +65,6 @@ builder.Services.AddCors((options) =>
                     .AllowCredentials();
             });
     });
-
-builder.Services.AddDbContext<DataContextEF>();
-builder.Services.AddScoped<AuthRepository>();
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<TransactionRepository>();
-builder.Services.AddScoped<TransactionService>();
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddScoped<CategoryService>();
-builder.Services.AddScoped<AccountRepository>();
-builder.Services.AddScoped<AccountService>();
 
 // ======================
 // Config JWT Authentication

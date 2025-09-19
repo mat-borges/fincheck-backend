@@ -1,10 +1,11 @@
 using FinCheck.Domain.Models;
+using FinCheck.Domain.Repositories;
 using FinCheck.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinCheck.Infrastructure.Repositories
 {
-	public class CategoryRepository(DataContextEF context)
+	public class CategoryRepository(DataContextEF context) : ICategoryRepository
 	{
 		private readonly DataContextEF _context = context;
 
