@@ -1,4 +1,4 @@
-using Fincheck.Domain.Models;
+using FinCheck.Domain.Models;
 
 namespace FinCheck.Application.Seed;
 public static class CategorySeeder
